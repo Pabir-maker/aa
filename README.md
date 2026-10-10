@@ -1,43 +1,129 @@
-create or replace PROCEDURE PROC_GET_ATOF_PRODUCTION_REPORT (p_date   IN  DATE,p_cursor OUT SYS_REFCURSOR) AS
-    v_sql CLOB;
-    v_table_name VARCHAR2(100);
+
+CREATE OR REPLACE PROCEDURE PROC_GET_ATOF_PRODUCTION_REPORT
+(
+    p_date   IN  DATE,
+    p_cursor OUT SYS_REFCURSOR
+)
+AS
+    v_sql        CLOB;
+    v_table_name VARCHAR2(261);
 BEGIN
-    -- 1. Identify the table name from your master setup (assuming 1 target table for the report)
+
+    -- 1. Get source table name from master table
     BEGIN
-        SELECT DISTINCT iMonitor_Table_Name INTO v_table_name FROM imtg.T_ATOF_PROD_REPORT_MASTER WHERE REQUIRED = 'Y' AND iMonitor_Table_Name IS NOT NULL  AND ROWNUM = 1;
-    EXCEPTION 
-    WHEN NO_DATA_FOUND THEN
-    v_table_name := 'DEMO.T_BF_PRODUCTION_TEST'; -- Fallback default
+        SELECT iMonitor_Table_Name
+        INTO v_table_name
+        FROM imtg.T_ATOF_PROD_REPORT_MASTER
+        WHERE REQUIRED = 'Y'
+          AND iMonitor_Table_Name IS NOT NULL
+          AND ROWNUM = 1;
+
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            v_table_name := 'DEMO.T_BF_PRODUCTION_TEST';
     END;
-    -- 2. Build a dynamic UNPIVOT-like query using UNION ALL from the Master Table rows
-    FOR k IN (SELECT SL_NO, iMonitor_Column FROM imtg.T_ATOF_PROD_REPORT_MASTER WHERE REQUIRED = 'Y' AND iMonitor_Column IS NOT NULL AND SL_NO<=30 ORDER BY SL_NO)
+
+    -- 2. Build dynamic query using UNION ALL
+    FOR k IN
+    (
+        SELECT SL_NO, TRIM(iMonitor_Column) AS iMonitor_Column
+        FROM imtg.T_ATOF_PROD_REPORT_MASTER
+        WHERE REQUIRED = 'Y'
+          AND iMonitor_Column IS NOT NULL
+          AND SL_NO <= 30
+        ORDER BY SL_NO
+    )
     LOOP
+
         IF v_sql IS NOT NULL THEN
             v_sql := v_sql || ' UNION ALL ';
         END IF;
-        -- We apply SUM for Production, and AVG for Rates/Percentages dynamically based on column names
-        v_sql := v_sql 
-                 || 'SELECT ''' || k.iMonitor_Column || ''' AS Metric_Name, '
-                 || 'CASE WHEN ''' || k.iMonitor_Column || ''' = ''PRODUCTION'' THEN SUM(CASE WHEN FUR_NO = ''C'' THEN ' || k.iMonitor_Column || ' END) '
-                 || '     ELSE AVG(CASE WHEN FUR_NO = ''C'' THEN ' || k.iMonitor_Column || ' END) END AS CBF, '
-                 || 'CASE WHEN ''' || k.iMonitor_Column || ''' = ''PRODUCTION'' THEN SUM(CASE WHEN FUR_NO = ''E'' THEN ' || k.iMonitor_Column || ' END) '
-                 || '     ELSE AVG(CASE WHEN FUR_NO = ''E'' THEN ' || k.iMonitor_Column || ' END) END AS EBF, '
-                 || 'CASE WHEN ''' || k.iMonitor_Column || ''' = ''PRODUCTION'' THEN SUM(CASE WHEN FUR_NO = ''F'' THEN ' || k.iMonitor_Column || ' END) '
-                 || '     ELSE AVG(CASE WHEN FUR_NO = ''F'' THEN ' || k.iMonitor_Column || ' END) END AS FBF '
-                 || 'FROM ' || v_table_name || ' '
-                 || 'WHERE Timestamp >= TRUNC(:1) - 2 '
-                 || 'GROUP BY ''' || k.iMonitor_Column || '''';
+
+        v_sql := v_sql
+            || 'SELECT '''
+            || REPLACE(UPPER(TRIM(k.iMonitor_Column)), '''', '''''')
+            || ''' AS METRIC_NAME, '
+
+            || 'CASE WHEN UPPER('''
+            || REPLACE(TRIM(k.iMonitor_Column), '''', '''''')
+            || ''') = ''PRODUCTION'' THEN '
+            || 'SUM(CASE WHEN FUR_NO = ''C'' THEN '
+            || DBMS_ASSERT.SIMPLE_SQL_NAME(
+                   UPPER(TRIM(k.iMonitor_Column))
+               )
+            || ' END) ELSE '
+            || 'AVG(CASE WHEN FUR_NO = ''C'' THEN '
+            || DBMS_ASSERT.SIMPLE_SQL_NAME(
+                   UPPER(TRIM(k.iMonitor_Column))
+               )
+            || ' END) END AS CBF, '
+
+            || 'CASE WHEN UPPER('''
+            || REPLACE(TRIM(k.iMonitor_Column), '''', '''''')
+            || ''') = ''PRODUCTION'' THEN '
+            || 'SUM(CASE WHEN FUR_NO = ''E'' THEN '
+            || DBMS_ASSERT.SIMPLE_SQL_NAME(
+                   UPPER(TRIM(k.iMonitor_Column))
+               )
+            || ' END) ELSE '
+            || 'AVG(CASE WHEN FUR_NO = ''E'' THEN '
+            || DBMS_ASSERT.SIMPLE_SQL_NAME(
+                   UPPER(TRIM(k.iMonitor_Column))
+               )
+            || ' END) END AS EBF, '
+
+            || 'CASE WHEN UPPER('''
+            || REPLACE(TRIM(k.iMonitor_Column), '''', '''''')
+            || ''') = ''PRODUCTION'' THEN '
+            || 'SUM(CASE WHEN FUR_NO = ''F'' THEN '
+            || DBMS_ASSERT.SIMPLE_SQL_NAME(
+                   UPPER(TRIM(k.iMonitor_Column))
+               )
+            || ' END) ELSE '
+            || 'AVG(CASE WHEN FUR_NO = ''F'' THEN '
+            || DBMS_ASSERT.SIMPLE_SQL_NAME(
+                   UPPER(TRIM(k.iMonitor_Column))
+               )
+            || ' END) END AS FBF '
+
+            || 'FROM SRC';
+
     END LOOP;
-    -- 3. Open the cursor with the final ordered dataset
+
+    -- 3. Apply the selected date once
     IF v_sql IS NOT NULL THEN
-        -- Wrap the entire block to ensure everything is sorted neatly by Metric Name
-        v_sql := 'SELECT * FROM (' || v_sql || ') ORDER BY Metric_Name';
+
+        v_sql :=
+              'WITH SRC AS ('
+            || ' SELECT * FROM ' || v_table_name
+            || ' WHERE "TIMESTAMP" >= TRUNC(:p_date)'
+            || ' AND "TIMESTAMP" < TRUNC(:p_date) + 1'
+            || ') '
+            || 'SELECT * FROM ('
+            || v_sql
+            || ') ORDER BY METRIC_NAME';
+
+        -- Pass date once
         OPEN p_cursor FOR v_sql USING p_date;
+
     ELSE
-        OPEN p_cursor FOR SELECT NULL AS Metric_Name, NULL AS CBF, NULL AS EBF, NULL AS FBF FROM DUAL WHERE 1=0;
+
+        OPEN p_cursor FOR
+            SELECT CAST(NULL AS VARCHAR2(128)) AS METRIC_NAME,
+                   CAST(NULL AS NUMBER) AS CBF,
+                   CAST(NULL AS NUMBER) AS EBF,
+                   CAST(NULL AS NUMBER) AS FBF
+            FROM DUAL
+            WHERE 1 = 0;
+
     END IF;
+
 EXCEPTION
-WHEN OTHERS THEN 
-DBMS_OUTPUT.PUT_LINE('Error building dynamic matrix report: ' || SQLERRM);
-RAISE;
-END;
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE(
+            'Error building dynamic matrix report: ' || SQLERRM
+        );
+        RAISE;
+
+END PROC_GET_ATOF_PRODUCTION_REPORT;
+/
