@@ -1,237 +1,79 @@
-WITH SOURCE_DATA AS
-(
-    SELECT
-        TRUNC(TIMESTAMP) AS TIMESTAMP,
-        FUR_NO,
-        COKE_CONS,
-        NC_CONS,
-        NOA_ORE_CONS,
-        JODA_ORE_CONS,
-        SINTER_CONS,
-        MN_ORE_CONS,
-        QUARTZ_CONS,
-        LIMESTONE_CONS,
-        DOLOMITE_CONS,
-        SCRAP_CONS,
-        DUNITE_CONS,
-        BREX_CONS,
-        DRI_CONS,
-        LD_SLAG_CONS,
-        PELLET_CONS,
-        ASRF_CONS,
-        PYROXINITE_CONS,
-        COAL_CONS,
-        TAR_CONS,
-        'OnDt' AS PERIOD
-    FROM DEMO.T_BF_PRODUCTION_TEST
-    WHERE TIMESTAMP >= TRUNC(SYSDATE) - 365
-      AND FUR_NO IN ('C', 'E', 'F')
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Web.Mvc;
+using Oracle.ManagedDataAccess.Client;
+using YourProject.Models;
 
-    UNION ALL
+namespace YourProject.Controllers
+{
+    public class RawMaterialController : Controller
+    {
+        public ActionResult Index()
+        {
+            return View();
+        }
 
-    SELECT
-        TRUNC(TIMESTAMP) AS TIMESTAMP,
-        FUR_NO,
-        COKE_CONS,
-        NC_CONS,
-        NOA_ORE_CONS,
-        JODA_ORE_CONS,
-        SINTER_CONS,
-        MN_ORE_CONS,
-        QUARTZ_CONS,
-        LIMESTONE_CONS,
-        DOLOMITE_CONS,
-        SCRAP_CONS,
-        DUNITE_CONS,
-        BREX_CONS,
-        DRI_CONS,
-        LD_SLAG_CONS,
-        PELLET_CONS,
-        ASRF_CONS,
-        PYROXINITE_CONS,
-        COAL_CONS,
-        TAR_CONS,
-        'ToDt' AS PERIOD
-    FROM DEMO.T_BF_PRODUCTION_TODATE_TEST
-    WHERE TIMESTAMP >= TRUNC(SYSDATE) - 365
-      AND FUR_NO IN ('C', 'E', 'F')
-),
-MATERIAL_DATA AS
-(
-    SELECT TIMESTAMP, PERIOD, FUR_NO,
-           'COKE' AS MATERIAL, COKE_CONS AS CONS
-    FROM SOURCE_DATA
+        [HttpGet]
+        public JsonResult GetReport()
+        {
+            var list = new List<RawMaterialReport>();
 
-    UNION ALL
+            string sql = @"
+                SELECT TIMESTAMP, MATERIAL, PERIOD,
+                       CBF, EBF, FBF, PLANT
+                FROM IMTG.V_ATOP_RAW_MATERIAL_REPORT
+                WHERE TIMESTAMP >= SYSDATE - 2
+                ORDER BY TIMESTAMP DESC";
 
-    SELECT TIMESTAMP, PERIOD, FUR_NO,
-           'NUT COKE', NC_CONS
-    FROM SOURCE_DATA
+            string connectionString =
+                ConfigurationManager
+                .ConnectionStrings["OracleConnection"]
+                .ConnectionString;
 
-    UNION ALL
+            using (var con =
+                new OracleConnection(connectionString))
+            using (var cmd = new OracleCommand(sql, con))
+            {
+                con.Open();
 
-    SELECT TIMESTAMP, PERIOD, FUR_NO,
-           'Noa Ore', NOA_ORE_CONS
-    FROM SOURCE_DATA
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        list.Add(new RawMaterialReport
+                        {
+                            Timestamp = Convert.ToDateTime(
+                                reader["TIMESTAMP"])
+                                .ToString("dd-MMM-yyyy HH:mm:ss"),
 
-    UNION ALL
+                            Material = Convert.ToString(
+                                reader["MATERIAL"]),
 
-    SELECT TIMESTAMP, PERIOD, FUR_NO,
-           'Joda Ore', JODA_ORE_CONS
-    FROM SOURCE_DATA
+                            Period = Convert.ToString(
+                                reader["PERIOD"]),
 
-    UNION ALL
+                            CBF = reader["CBF"] == DBNull.Value
+                                ? (decimal?)null
+                                : Convert.ToDecimal(reader["CBF"]),
 
-    SELECT TIMESTAMP, PERIOD, FUR_NO,
-           'Sinter', SINTER_CONS
-    FROM SOURCE_DATA
+                            EBF = reader["EBF"] == DBNull.Value
+                                ? (decimal?)null
+                                : Convert.ToDecimal(reader["EBF"]),
 
-    UNION ALL
+                            FBF = reader["FBF"] == DBNull.Value
+                                ? (decimal?)null
+                                : Convert.ToDecimal(reader["FBF"]),
 
-    SELECT TIMESTAMP, PERIOD, FUR_NO,
-           'Mn Ore', MN_ORE_CONS
-    FROM SOURCE_DATA
+                            Plant = reader["PLANT"] == DBNull.Value
+                                ? (decimal?)null
+                                : Convert.ToDecimal(reader["PLANT"])
+                        });
+                    }
+                }
+            }
 
-    UNION ALL
-
-    SELECT TIMESTAMP, PERIOD, FUR_NO,
-           'Quartz', QUARTZ_CONS
-    FROM SOURCE_DATA
-
-    UNION ALL
-
-    SELECT TIMESTAMP, PERIOD, FUR_NO,
-           'Limestone', LIMESTONE_CONS
-    FROM SOURCE_DATA
-
-    UNION ALL
-
-    SELECT TIMESTAMP, PERIOD, FUR_NO,
-           'Dolomite', DOLOMITE_CONS
-    FROM SOURCE_DATA
-
-    UNION ALL
-
-    SELECT TIMESTAMP, PERIOD, FUR_NO,
-           'Scrap', SCRAP_CONS
-    FROM SOURCE_DATA
-
-    UNION ALL
-
-    SELECT TIMESTAMP, PERIOD, FUR_NO,
-           'Dunite', DUNITE_CONS
-    FROM SOURCE_DATA
-
-    UNION ALL
-
-    SELECT TIMESTAMP, PERIOD, FUR_NO,
-           'Brex', BREX_CONS
-    FROM SOURCE_DATA
-
-    UNION ALL
-
-    SELECT TIMESTAMP, PERIOD, FUR_NO,
-           'DRI', DRI_CONS
-    FROM SOURCE_DATA
-
-    UNION ALL
-
-    SELECT TIMESTAMP, PERIOD, FUR_NO,
-           'LD Slag', LD_SLAG_CONS
-    FROM SOURCE_DATA
-
-    UNION ALL
-
-    SELECT TIMESTAMP, PERIOD, FUR_NO,
-           'Pellet', PELLET_CONS
-    FROM SOURCE_DATA
-
-    UNION ALL
-
-    SELECT TIMESTAMP, PERIOD, FUR_NO,
-           'ASRF', ASRF_CONS
-    FROM SOURCE_DATA
-
-    UNION ALL
-
-    SELECT TIMESTAMP, PERIOD, FUR_NO,
-           'Pyroxinite', PYROXINITE_CONS
-    FROM SOURCE_DATA
-
-    UNION ALL
-
-    SELECT TIMESTAMP, PERIOD, FUR_NO,
-           'Coal Injection', COAL_CONS
-    FROM SOURCE_DATA
-
-    UNION ALL
-
-    SELECT TIMESTAMP, PERIOD, FUR_NO,
-           'Tar Injection', TAR_CONS
-    FROM SOURCE_DATA
-)
-SELECT
-    TIMESTAMP,
-    MATERIAL,
-    PERIOD,
-
-    NVL(MAX(CASE
-        WHEN FUR_NO = 'C' THEN CONS
-    END), 0) AS CBF,
-
-    NVL(MAX(CASE
-        WHEN FUR_NO = 'E' THEN CONS
-    END), 0) AS EBF,
-
-    NVL(MAX(CASE
-        WHEN FUR_NO = 'F' THEN CONS
-    END), 0) AS FBF,
-
-    NVL(MAX(CASE
-        WHEN FUR_NO = 'C' THEN CONS
-    END), 0)
-    +
-    NVL(MAX(CASE
-        WHEN FUR_NO = 'E' THEN CONS
-    END), 0)
-    +
-    NVL(MAX(CASE
-        WHEN FUR_NO = 'F' THEN CONS
-    END), 0) AS PLANT
-
-FROM MATERIAL_DATA
-
-GROUP BY
-    TIMESTAMP,
-    MATERIAL,
-    PERIOD
-
-ORDER BY
-    CASE MATERIAL
-        WHEN 'COKE'           THEN 1
-        WHEN 'NUT COKE'       THEN 2
-        WHEN 'Noa Ore'        THEN 3
-        WHEN 'Joda Ore'       THEN 4
-        WHEN 'Sinter'         THEN 5
-        WHEN 'Mn Ore'         THEN 6
-        WHEN 'Quartz'         THEN 7
-        WHEN 'Limestone'      THEN 8
-        WHEN 'Dolomite'       THEN 9
-        WHEN 'Scrap'          THEN 10
-        WHEN 'Dunite'         THEN 11
-        WHEN 'Brex'           THEN 12
-        WHEN 'DRI'            THEN 13
-        WHEN 'LD Slag'        THEN 14
-        WHEN 'Pellet'         THEN 15
-        WHEN 'ASRF'           THEN 16
-        WHEN 'Pyroxinite'     THEN 17
-        WHEN 'Coal Injection' THEN 18
-        WHEN 'Tar Injection'  THEN 19
-        ELSE 20
-    END,
-    TIMESTAMP,
-    CASE PERIOD
-        WHEN 'OnDt' THEN 1
-        WHEN 'ToDt' THEN 2
-        ELSE 3
-    END;
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+    }
+}
