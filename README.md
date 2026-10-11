@@ -1,26 +1,203 @@
+WITH SOURCE_DATA AS
+(
+    SELECT
+        TRUNC(TIMESTAMP) AS TIMESTAMP,
+        FUR_NO,
+        COKE_CONS,
+        NC_CONS,
+        NOA_ORE_CONS,
+        JODA_ORE_CONS,
+        SINTER_CONS,
+        MN_ORE_CONS,
+        QUARTZ_CONS,
+        LIMESTONE_CONS,
+        DOLOMITE_CONS,
+        SCRAP_CONS,
+        DUNITE_CONS,
+        BREX_CONS,
+        DRI_CONS,
+        LD_SLAG_CONS,
+        PELLET_CONS,
+        ASRF_CONS,
+        PYROXINITE_CONS,
+        COAL_CONS,
+        TAR_CONS,
+        'OnDt' AS PERIOD
+    FROM DEMO.T_BF_PRODUCTION_TEST
+    WHERE TIMESTAMP >= TRUNC(SYSDATE) - 365
+      AND FUR_NO IN ('C', 'E', 'F')
 
+    UNION ALL
+
+    SELECT
+        TRUNC(TIMESTAMP) AS TIMESTAMP,
+        FUR_NO,
+        COKE_CONS,
+        NC_CONS,
+        NOA_ORE_CONS,
+        JODA_ORE_CONS,
+        SINTER_CONS,
+        MN_ORE_CONS,
+        QUARTZ_CONS,
+        LIMESTONE_CONS,
+        DOLOMITE_CONS,
+        SCRAP_CONS,
+        DUNITE_CONS,
+        BREX_CONS,
+        DRI_CONS,
+        LD_SLAG_CONS,
+        PELLET_CONS,
+        ASRF_CONS,
+        PYROXINITE_CONS,
+        COAL_CONS,
+        TAR_CONS,
+        'ToDt' AS PERIOD
+    FROM DEMO.T_BF_PRODUCTION_TODATE_TEST
+    WHERE TIMESTAMP >= TRUNC(SYSDATE) - 365
+      AND FUR_NO IN ('C', 'E', 'F')
+),
+MATERIAL_DATA AS
+(
+    SELECT TIMESTAMP, PERIOD, FUR_NO,
+           'COKE' AS MATERIAL, COKE_CONS AS CONS
+    FROM SOURCE_DATA
+
+    UNION ALL
+
+    SELECT TIMESTAMP, PERIOD, FUR_NO,
+           'NUT COKE', NC_CONS
+    FROM SOURCE_DATA
+
+    UNION ALL
+
+    SELECT TIMESTAMP, PERIOD, FUR_NO,
+           'Noa Ore', NOA_ORE_CONS
+    FROM SOURCE_DATA
+
+    UNION ALL
+
+    SELECT TIMESTAMP, PERIOD, FUR_NO,
+           'Joda Ore', JODA_ORE_CONS
+    FROM SOURCE_DATA
+
+    UNION ALL
+
+    SELECT TIMESTAMP, PERIOD, FUR_NO,
+           'Sinter', SINTER_CONS
+    FROM SOURCE_DATA
+
+    UNION ALL
+
+    SELECT TIMESTAMP, PERIOD, FUR_NO,
+           'Mn Ore', MN_ORE_CONS
+    FROM SOURCE_DATA
+
+    UNION ALL
+
+    SELECT TIMESTAMP, PERIOD, FUR_NO,
+           'Quartz', QUARTZ_CONS
+    FROM SOURCE_DATA
+
+    UNION ALL
+
+    SELECT TIMESTAMP, PERIOD, FUR_NO,
+           'Limestone', LIMESTONE_CONS
+    FROM SOURCE_DATA
+
+    UNION ALL
+
+    SELECT TIMESTAMP, PERIOD, FUR_NO,
+           'Dolomite', DOLOMITE_CONS
+    FROM SOURCE_DATA
+
+    UNION ALL
+
+    SELECT TIMESTAMP, PERIOD, FUR_NO,
+           'Scrap', SCRAP_CONS
+    FROM SOURCE_DATA
+
+    UNION ALL
+
+    SELECT TIMESTAMP, PERIOD, FUR_NO,
+           'Dunite', DUNITE_CONS
+    FROM SOURCE_DATA
+
+    UNION ALL
+
+    SELECT TIMESTAMP, PERIOD, FUR_NO,
+           'Brex', BREX_CONS
+    FROM SOURCE_DATA
+
+    UNION ALL
+
+    SELECT TIMESTAMP, PERIOD, FUR_NO,
+           'DRI', DRI_CONS
+    FROM SOURCE_DATA
+
+    UNION ALL
+
+    SELECT TIMESTAMP, PERIOD, FUR_NO,
+           'LD Slag', LD_SLAG_CONS
+    FROM SOURCE_DATA
+
+    UNION ALL
+
+    SELECT TIMESTAMP, PERIOD, FUR_NO,
+           'Pellet', PELLET_CONS
+    FROM SOURCE_DATA
+
+    UNION ALL
+
+    SELECT TIMESTAMP, PERIOD, FUR_NO,
+           'ASRF', ASRF_CONS
+    FROM SOURCE_DATA
+
+    UNION ALL
+
+    SELECT TIMESTAMP, PERIOD, FUR_NO,
+           'Pyroxinite', PYROXINITE_CONS
+    FROM SOURCE_DATA
+
+    UNION ALL
+
+    SELECT TIMESTAMP, PERIOD, FUR_NO,
+           'Coal Injection', COAL_CONS
+    FROM SOURCE_DATA
+
+    UNION ALL
+
+    SELECT TIMESTAMP, PERIOD, FUR_NO,
+           'Tar Injection', TAR_CONS
+    FROM SOURCE_DATA
+)
 SELECT
     TIMESTAMP,
     MATERIAL,
     PERIOD,
 
-    NVL(MAX(CASE WHEN FUR_NO = 'C'
-                 THEN CONS END), 0) AS CBF,
+    NVL(MAX(CASE
+        WHEN FUR_NO = 'C' THEN CONS
+    END), 0) AS CBF,
 
-    NVL(MAX(CASE WHEN FUR_NO = 'E'
-                 THEN CONS END), 0) AS EBF,
+    NVL(MAX(CASE
+        WHEN FUR_NO = 'E' THEN CONS
+    END), 0) AS EBF,
 
-    NVL(MAX(CASE WHEN FUR_NO = 'F'
-                 THEN CONS END), 0) AS FBF,
+    NVL(MAX(CASE
+        WHEN FUR_NO = 'F' THEN CONS
+    END), 0) AS FBF,
 
-    NVL(MAX(CASE WHEN FUR_NO = 'C'
-                 THEN CONS END), 0)
+    NVL(MAX(CASE
+        WHEN FUR_NO = 'C' THEN CONS
+    END), 0)
     +
-    NVL(MAX(CASE WHEN FUR_NO = 'E'
-                 THEN CONS END), 0)
+    NVL(MAX(CASE
+        WHEN FUR_NO = 'E' THEN CONS
+    END), 0)
     +
-    NVL(MAX(CASE WHEN FUR_NO = 'F'
-                 THEN CONS END), 0) AS PLANT
+    NVL(MAX(CASE
+        WHEN FUR_NO = 'F' THEN CONS
+    END), 0) AS PLANT
 
 FROM MATERIAL_DATA
 
