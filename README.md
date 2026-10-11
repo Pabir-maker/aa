@@ -1,27 +1,63 @@
- [HttpGet]
-        public JsonResult GETATOFProdRawmaterialReport()
+```csharp
+[HttpGet]
+public JsonResult GETATOFProdRawmaterialReport()
+{
+    var list = new List<RawMaterialReport>();
+
+    string sql = @"
+        SELECT
+            MATERIAL,
+            PERIOD,
+            CBF,
+            EBF,
+            FBF,
+            PLANT
+        FROM IMTG.V_ATOP_RAW_MATERIAL_REPORT
+        WHERE TIMESTAMP >= SYSDATE - 2
+        ORDER BY TIMESTAMP, PERIOD";
+
+    using (OracleConnection con =
+        new OracleConnection(iMonitorWebUtils.msConRWString))
+    {
+        con.Open();
+
+        using (OracleCommand cmd = new OracleCommand(sql, con))
         {
-            var list = new List<RawMaterialReport>();
-            string sql = @"SELECT MATERIAL,PERIOD,CBF, EBF,FBF,PLANT FROM IMTG.V_ATOP_RAW_MATERIAL_REPORT WHERE TIMESTAMP >= SYSDATE - 2";
-            using (OracleConnection con = new OracleConnection(iMonitorWebUtils.msConRWString))
+            using (OracleDataReader reader = cmd.ExecuteReader())
             {
-                con.Open();
-                using (var reader = cmd.ExecuteReader())
+                while (reader.Read())
                 {
-                    while (reader.Read())
+                    list.Add(new RawMaterialReport
                     {
-                        list.Add(new RawMaterialReport
-                        {                           
-                            Material = Convert.ToString(reader["MATERIAL"]),
-                            Period = Convert.ToString(reader["PERIOD"]),
-                            CBF = reader["CBF"] == DBNull.Value? (decimal?)null: Convert.ToDecimal(reader["CBF"]),
-                            EBF = reader["EBF"] == DBNull.Value? (decimal?)null: Convert.ToDecimal(reader["EBF"]),
-                            FBF = reader["FBF"] == DBNull.Value? (decimal?)null: Convert.ToDecimal(reader["FBF"]),
-                            Plant = reader["PLANT"] == DBNull.Value? (decimal?)null: Convert.ToDecimal(reader["PLANT"])
-                        });
-                    }
+                        Material = reader["MATERIAL"] == DBNull.Value
+                            ? null
+                            : Convert.ToString(reader["MATERIAL"]),
+
+                        Period = reader["PERIOD"] == DBNull.Value
+                            ? null
+                            : Convert.ToString(reader["PERIOD"]),
+
+                        CBF = reader["CBF"] == DBNull.Value
+                            ? (decimal?)null
+                            : Convert.ToDecimal(reader["CBF"]),
+
+                        EBF = reader["EBF"] == DBNull.Value
+                            ? (decimal?)null
+                            : Convert.ToDecimal(reader["EBF"]),
+
+                        FBF = reader["FBF"] == DBNull.Value
+                            ? (decimal?)null
+                            : Convert.ToDecimal(reader["FBF"]),
+
+                        Plant = reader["PLANT"] == DBNull.Value
+                            ? (decimal?)null
+                            : Convert.ToDecimal(reader["PLANT"])
+                    });
                 }
             }
-
-            return Json(list, JsonRequestBehavior.AllowGet);
         }
+    }
+
+    return Json(list, JsonRequestBehavior.AllowGet);
+}
+```
