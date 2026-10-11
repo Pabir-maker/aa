@@ -1,46 +1,31 @@
-  <script>   
-    function LoadRawMaterialReport() {
-        $.ajax({
-            url: '@Url.Action("GETATOFProdRawmaterialReport", "Report")',
-            type: 'GET',
-            dataType: 'json',
+<script>
+    $(document).ready(function () {
 
-            success: function (data) {
+        $.getJSON('@Url.Action("GETATOFProdRawmaterialReport", "Report")',
+            function (data) {
+
                 var rows = '';
 
-                if (!data || data.length === 0) {
-                    rows = '<tr><td colspan="7" class="text-center">' +
-                           'No records found</td></tr>';
+                if (data.length == 0) {
+                    rows = '<tr><td colspan="7">No records found</td></tr>';
+                }
+                else {
+                    $.each(data, function (i, item) {
 
-                    $('#rawMaterialBody').html(rows);
-                    return;
+                        rows += '<tr>' +
+                            '<td>' + (i + 1) + '</td>' +
+                            '<td>' + item.Material + '</td>' +
+                            '<td>' + item.Period + '</td>' +
+                            '<td>' + item.CBF + '</td>' +
+                            '<td>' + item.EBF + '</td>' +
+                            '<td>' + item.FBF + '</td>' +
+                            '<td>' + item.Plant + '</td>' +
+                            '</tr>';
+                    });
                 }
 
-                $.each(data, function (i, item) {
-
-                    rows += '<tr>' +
-                        '<td>' + (i + 1) + '</td>' +
-                        '<td>' + escapeHtml(item.Material) + '</td>' +
-                        '<td>' + escapeHtml(item.Period) + '</td>' +
-                        '<td>' + formatNumber(item.CBF) + '</td>' +
-                        '<td>' + formatNumber(item.EBF) + '</td>' +
-                        '<td>' + formatNumber(item.FBF) + '</td>' +
-                        '<td>' + formatNumber(item.Plant) + '</td>' +
-                        '</tr>';
-                });
-
                 $('#rawMaterialBody').html(rows);
-            },
 
-            error: function (xhr, status, error) {
-                $('#rawMaterialBody').html(
-                    '<tr><td colspan="7" class="text-center text-danger">' +
-                    'Error loading raw material report</td></tr>'
-                );
-
-                console.error(error);
-            }
-        });
-    }
-    
-    </script>
+            });
+    });
+</script>
