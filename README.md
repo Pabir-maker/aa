@@ -1,4 +1,9 @@
-<tr>
+
+ public decimal SLAG_GENERATION_ONDT { get; set; }
+    public decimal SLAG_GENERATION_TODT { get; set; }
+
+    public decimal SLAG_LADLE_TONS_ONDT { get; set; }
+    public decimal SLAG_LADLE_TONS_TODT { get; set; }<tr>
             <td>C</td>
             <td><input type="text" id="C_SG_ONDT" class="form-control form-control-sm" readonly /></td>
             <td><input type="text" id="C_SG_TODT" class="form-control form-control-sm" readonly /></td>
