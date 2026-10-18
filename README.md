@@ -1,6 +1,5 @@
- public decimal SLAG_GENERATION_ONDT { get; set; }
+        public decimal SLAG_GENERATION_ONDT { get; set; }
         public decimal SLAG_GENERATION_TODT { get; set; }
-
         public decimal SLAG_LADLE_TONS_ONDT { get; set; }
         public decimal SLAG_LADLE_TONS_TODT { get; set; }
 
@@ -115,3 +114,6 @@ function GetBFSlagReport() {
 $('#p_date').change(function () {
     GetBFSlagReport();
 });
+C	879	879	0	0
+E	0	0	139	139
+F	1671	1671	0	0
