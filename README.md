@@ -1,24 +1,24 @@
- function Distribution_HM_TON()
-        {
-            $.ajax({
-                url: '@Url.Action("GET_Distribution_HM_TON", "Report")',
-                type: 'GET',
-                data: { date: lsSelectedFDate },
-                dataType: 'json',
-                success: function (data) {
-                    console.log(data);
+$(document).ready(function () {
 
-                    $.each(data, function (i, item) {
-                        console.log("Date:", item.DATE_TIME);
-                        console.log("LD1 ONDT:", item.LD1_TON_ONDT);
-                        console.log("Total ONDT:", item.TOTAL_ONDT);
-                        console.log("LD1 TODT:", item.LD1_TON_TODT);
-                        console.log("Total TODT:", item.TOTAL_TODT);
-                    });
-                },
-                error: function (xhr) {
-                    console.log(xhr.responseText);
-                }
-            });
+    $.ajax({
+        url: '@Url.Action("GetLadleTonReport", "Report")',
+        type: 'GET',
+        data: {
+            p_date: $('#p_date').val()
+        },
+        success: function (data) {
+            if (data != null && data.length > 0) {
+                var item = data[0];
 
-}
+                $('#LD1_TON_ONDT').val(item.LD1_TON_ONDT);
+                $('#TOTAL_ONDT').val(item.TOTAL_ONDT);
+                $('#LD1_TON_TODT').val(item.LD1_TON_TODT);
+                $('#TOTAL_TODT').val(item.TOTAL_TODT);
+            }
+        },
+        error: function (xhr) {
+            console.log(xhr.responseText);
+        }
+    });
+
+});
