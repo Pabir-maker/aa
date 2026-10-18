@@ -1,24 +1,5 @@
-$(document).ready(function () {
-
-    $.ajax({
-        url: '@Url.Action("GetLadleTonReport", "Report")',
-        type: 'GET',
-        data: {
-            p_date: $('#p_date').val()
-        },
-        success: function (data) {
-            if (data != null && data.length > 0) {
-                var item = data[0];
-
-                $('#LD1_TON_ONDT').val(item.LD1_TON_ONDT);
-                $('#TOTAL_ONDT').val(item.TOTAL_ONDT);
-                $('#LD1_TON_TODT').val(item.LD1_TON_TODT);
-                $('#TOTAL_TODT').val(item.TOTAL_TODT);
-            }
-        },
-        error: function (xhr) {
-            console.log(xhr.responseText);
-        }
-    });
-
-});
+SELECT t.FUR_NO, ROUND(nvl(t.slag_generation,0))slag_generation_ONDT,ROUND(nvl(tt.slag_generation,0))slag_generation_TODT,
+ROUND(nvl(t.SLAG_LADLE_TONS,0))SLAG_LADLE_TONS_ONDT,ROUND(nvl(tt.SLAG_LADLE_TONS,0))SLAG_LADLE_TONS_TODT
+FROM demo.t_bf_production_test t,demo.t_bf_production_test tt
+WHERE (t.TIMESTAMP='17-oct-2026' ) AND (t.FUR_NO Not In ('G','H','D')) AND t.TIMESTAMP=tt.TIMESTAMP and t.FUR_NO=tt.FUR_NO
+ORDER BY t.FUR_NO
