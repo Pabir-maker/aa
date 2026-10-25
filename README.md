@@ -1,227 +1,207 @@
-var table_body = '';
-
-table_body += '<div class="plant-table-wrapper">';
-table_body += '<div class="plant-table-scroll">';
-
-table_body += '<table class="plant-responsive-table">';
-
-table_body += '<thead>';
-
-/* Plant group headings */
-table_body += '<tr>';
-
-table_body += '<th></th>';
-table_body += '<th colspan="4">TSL, Jamshedpur</th>';
-table_body += '<th>TSK</th>';
-table_body += '<th colspan="3">TSM</th>';
-table_body += '<th>NINL</th>';
-table_body += '<th>TSG</th>';
-table_body += '<th>TSMD</th>';
-
-table_body += '</tr>';
-
-/* Subheadings */
-table_body += '<tr>';
-
-table_body += '<th>Parameters</th>';
-
-table_body += '<th>SP#1</th>';
-table_body += '<th>SP#2</th>';
-table_body += '<th>SP#3</th>';
-table_body += '<th>SP#4</th>';
-
-table_body += '<th>SP</th>';
-
-table_body += '<th>SP#1</th>';
-table_body += '<th>SP#2</th>';
-table_body += '<th>SP#3</th>';
-
-table_body += '<th>SP</th>';
-table_body += '<th>SP</th>';
-table_body += '<th>SP</th>';
-
-table_body += '</tr>';
-
-table_body += '</thead>';
-table_body += '<tbody>';
-
-/* Your existing data loop starts here */
-for (var i = 0; i < jData.length; i++) {
-
-    table_body += '<tr>';
-
-    table_body += '<td class="parameter">';
-    table_body += '<a href="javascript:void(0)" ';
-    table_body += 'onclick="ShowComparision(';
-    table_body += "'" + param[i] + "'";
-    table_body += ')">';
-    table_body += param[i];
-    table_body += '</a>';
-    table_body += '</td>';
-
-    /* TSL SP#1 */
-    table_body += '<td>';
-
-    if (tsj_SP1[i] != null) {
-        table_body += '<a href="javascript:void(0)" ';
-        table_body += 'onclick="ShowGraph(';
-        table_body += "'@plant1', '" + param[i] + "'";
-        table_body += ')">';
-        table_body += tsj_SP1[i];
-        table_body += '</a>';
-    }
-
-    table_body += '</td>';
-
-    /* TSL SP#2 */
-    table_body += '<td>';
-
-    if (tsj_SP2[i] != null) {
-        table_body += '<a href="javascript:void(0)" ';
-        table_body += 'onclick="ShowGraph(';
-        table_body += "'@plant2', '" + param[i] + "'";
-        table_body += ')">';
-        table_body += tsj_SP2[i];
-        table_body += '</a>';
-    }
-
-    table_body += '</td>';
-
-    /* TSL SP#3 */
-    table_body += '<td>';
-
-    if (tsj_SP3[i] != null) {
-        table_body += '<a href="javascript:void(0)" ';
-        table_body += 'onclick="ShowGraph(';
-        table_body += "'@plant3', '" + param[i] + "'";
-        table_body += ')">';
-        table_body += tsj_SP3[i];
-        table_body += '</a>';
-    }
-
-    table_body += '</td>';
-
-    /* TSL SP#4 */
-    table_body += '<td>';
-
-    if (tsj_SP4[i] != null) {
-        table_body += '<a href="javascript:void(0)" ';
-        table_body += 'onclick="ShowGraph(';
-        table_body += "'@plant4', '" + param[i] + "'";
-        table_body += ')">';
-        table_body += tsj_SP4[i];
-        table_body += '</a>';
-    }
-
-    table_body += '</td>';
-
-    /* TSK */
-    table_body += '<td>';
-
-    if (tsk_SP[i] != null) {
-        table_body += '<a href="javascript:void(0)" ';
-        table_body += 'onclick="ShowGraph(';
-        table_body += "'@plant5', '" + param[i] + "'";
-        table_body += ')">';
-        table_body += tsk_SP[i];
-        table_body += '</a>';
-    }
-
-    table_body += '</td>';
-
-    /* TSM SP#1 */
-    table_body += '<td>';
-
-    if (tsbsl_SP1[i] != null) {
-        table_body += '<a href="javascript:void(0)" ';
-        table_body += 'onclick="ShowGraph(';
-        table_body += "'@plant6', '" + param[i] + "'";
-        table_body += ')">';
-        table_body += tsbsl_SP1[i];
-        table_body += '</a>';
-    }
-
-    table_body += '</td>';
-
-    /* TSM SP#2 */
-    table_body += '<td>';
-
-    if (tsbsl_SP2[i] != null) {
-        table_body += '<a href="javascript:void(0)" ';
-        table_body += 'onclick="ShowGraph(';
-        table_body += "'@plant7', '" + param[i] + "'";
-        table_body += ')">';
-        table_body += tsbsl_SP2[i];
-        table_body += '</a>';
-    }
-
-    table_body += '</td>';
-
-    /* TSM SP#3 */
-    table_body += '<td>';
-
-    if (tsbsl_SP3[i] != null) {
-        table_body += '<a href="javascript:void(0)" ';
-        table_body += 'onclick="ShowGraph(';
-        table_body += "'@plant8', '" + param[i] + "'";
-        table_body += ')">';
-        table_body += tsbsl_SP3[i];
-        table_body += '</a>';
-    }
-
-    table_body += '</td>';
-
-    /* NINL */
-    table_body += '<td>';
-
-    if (ninl_SP[i] != null) {
-        table_body += '<a href="javascript:void(0)" ';
-        table_body += 'onclick="ShowGraph(';
-        table_body += "'@plant11', '" + param[i] + "'";
-        table_body += ')">';
-        table_body += ninl_SP[i];
-        table_body += '</a>';
-    }
-
-    table_body += '</td>';
-
-    /* TSG */
-    table_body += '<td>';
-
-    if (tslpl_SP[i] != null) {
-        table_body += '<a href="javascript:void(0)" ';
-        table_body += 'onclick="ShowGraph(';
-        table_body += "'@plant9', '" + param[i] + "'";
-        table_body += ')">';
-        table_body += tslpl_SP[i];
-        table_body += '</a>';
-    }
-
-    table_body += '</td>';
-
-    /* TSMD */
-    table_body += '<td>';
-
-    if (tsmd_Sp[i] != null) {
-        table_body += '<a href="javascript:void(0)" ';
-        table_body += 'onclick="ShowGraph(';
-        table_body += "'@plant10', '" + param[i] + "'";
-        table_body += ')">';
-        table_body += tsmd_Sp[i];
-        table_body += '</a>';
-    }
-
-    table_body += '</td>';
-
-    table_body += '</tr>';
+/* Main table container */
+.plant-table-wrapper {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-table_body += '</tbody>';
-table_body += '</table>';
+/* Horizontal and vertical scrolling */
+.plant-table-scroll {
+    width: 100%;
+    max-height: 75vh;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+}
 
-table_body += '</div>';
-table_body += '</div>';
+/* Table design */
+.plant-responsive-table {
+    width: 100%;
+    min-width: 1100px;
+    margin: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+}
 
-/* Display the responsive table */
-$('#tableDiv').html(table_body);
-$('#tableExcel').html(table_body);
+/* Column widths */
+.plant-responsive-table th:first-child,
+.plant-responsive-table td:first-child {
+    width: 230px;
+    min-width: 230px;
+}
+
+/* Table cells */
+.plant-responsive-table th,
+.plant-responsive-table td {
+    padding: 9px 8px;
+    border-right: 1px solid #d5dce5;
+    border-bottom: 1px solid #d5dce5;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+/* Sticky plant heading */
+.plant-responsive-table thead tr:first-child th {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    height: 40px;
+    background: #164e63;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Sticky SP heading */
+.plant-responsive-table thead tr:nth-child(2) th {
+    position: sticky;
+    top: 40px;
+    z-index: 5;
+    height: 38px;
+    background: #dbeafe;
+    color: #1e3a8a;
+    font-weight: bold;
+}
+
+/* Parameter heading */
+.plant-responsive-table thead th:first-child {
+    background: #1e3a5f;
+    color: #ffffff;
+}
+
+/* Parameter column remains visible during horizontal scrolling */
+.plant-responsive-table th:first-child,
+.plant-responsive-table td:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 3;
+    background: #f1f5f9;
+    text-align: left;
+}
+
+/* Keep the top-left header above other sticky cells */
+.plant-responsive-table thead tr:first-child th:first-child {
+    z-index: 8;
+}
+
+.plant-responsive-table thead tr:nth-child(2) th:first-child {
+    z-index: 8;
+}
+
+/* Table body */
+.plant-responsive-table tbody td {
+    height: 36px;
+    color: #263445;
+    font-size: 13px;
+}
+
+.plant-responsive-table tbody tr:nth-child(even) td {
+    background: #f8fafc;
+}
+
+.plant-responsive-table tbody tr:nth-child(odd) td {
+    background: #ffffff;
+}
+
+/* Keep the first column background opaque */
+.plant-responsive-table tbody tr:nth-child(even) td:first-child {
+    background: #eef2f7;
+}
+
+.plant-responsive-table tbody tr:nth-child(odd) td:first-child {
+    background: #f8fafc;
+}
+
+/* Row hover effect */
+.plant-responsive-table tbody tr:hover td {
+    background: #dff6ff;
+}
+
+.plant-responsive-table tbody tr:hover td:first-child {
+    background: #c9edfa;
+}
+
+/* Parameter links */
+.plant-responsive-table td:first-child a {
+    display: block;
+    color: #075985;
+    font-weight: bold;
+    text-decoration: none;
+    white-space: normal;
+}
+
+.plant-responsive-table td:first-child a:hover {
+    color: #0284c7;
+    text-decoration: underline;
+}
+
+/* Graph links */
+.plant-responsive-table td a:not(:first-child) {
+    color: #075985;
+    text-decoration: none;
+}
+
+/* Make clickable data obvious */
+.plant-responsive-table tbody td:not(:first-child) a {
+    display: inline-block;
+    padding: 2px 4px;
+    color: #075985;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.plant-responsive-table tbody td:not(:first-child) a:hover {
+    color: #0369a1;
+    text-decoration: underline;
+}
+
+/* Tablet */
+@media (max-width: 991px) {
+    .plant-table-scroll {
+        max-height: 70vh;
+    }
+
+    .plant-responsive-table {
+        font-size: 12px;
+    }
+
+    .plant-responsive-table th,
+    .plant-responsive-table td {
+        padding: 8px 6px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+    .plant-table-wrapper {
+        border-radius: 5px;
+    }
+
+    .plant-table-scroll {
+        max-height: 65vh;
+    }
+
+    .plant-responsive-table {
+        min-width: 1050px;
+        font-size: 12px;
+    }
+
+    .plant-responsive-table th,
+    .plant-responsive-table td {
+        padding: 7px 6px;
+    }
+
+    .plant-responsive-table tbody td {
+        height: 34px;
+    }
+}
