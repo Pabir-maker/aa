@@ -1,129 +1,227 @@
- var table_body = '<table width="100%"  border="1"  class="mis-table"  >';
-                       table_body += '<tbody>';
-                       table_body += '<tr>';
-                       table_body += '<td class="parameter" colspan="1"  style="height:40px;border:2px solid black;width:300px;text-align:center; align:center;font-size:15px;font-weight:bold;font-family: Arial;"></td>';
-                       table_body += '<td colspan="4"  style="border:2px solid black;width:100px;text-align:center; align:center;font-size:15px;font-weight:bold;font-family: Arial;" > TSL, Jamshedpur</td>';
-                       table_body += '<td td style="border:2px solid black;width:100px;text-align:center; align:center;font-size:15px;font-weight:bold;font-family:Arial;">TSK</td>';
-                       table_body += '<td colspan="3" td style="border:2px solid black;width:100px;text-align:center; align:center;font-size:15px;font-weight: bold;font-family:Arial;">TSM</td> ';
-                       table_body += '<td colspan="1" td style="border:2px solid black;width:100px;text-align:center; align:center;font-size:15px;font-weight: bold;font-family:Arial;">NINL</td> ';
-                       table_body += '<td td style="border:2px solid black;width:100px;text-align:center; align:center;font-size:15px;font-weight:bold;font-family:Arial;">TSG</td>';
-                       table_body += '<td td style="border:2px solid black;width:100px;text-align:center; align:center;font-size:15px;font-weight:bold;font-family:Arial;">TSMD</td>';
-                       table_body += '</tr>';                       //
-                       table_body += '<tr style="position:sticky;top:0;border:2px solid black;">';
-                       table_body += '<td style="top:0;height:40px;border:2px solid black; width:200px;text-align:center; align:center;font-size:15px;font-weight:bold;font-family:Arial;">Parameters</td>';                      //table_body += '<td style="top:0;border:2px solid black; background: linear-gradient(to bottom, #33ccff 0%, #55ffcc 20%, #ffffcc 80%);width:50px;text-align:center; align:center;font-size:20px;font-weight: bold;font-family:Arial;">Units</td>';                       //
+var table_body = '';
 
-                       table_body += '<td style="top:0;border:2px solid black; width:100px;text-align:center; align:center;font-size:15px;font-weight:bold;font-family:Arial;">SP#1</td>';
-                       table_body += '<td style="top:0;border:2px solid black; width:100px;text-align:center; align:center;font-size:15px;font-weight:bold;font-family:Arial;">SP#2</td>';
-                       table_body += '<td style="top:0;border:2px solid black; width:100px;text-align:center; align:center;font-size:15px;font-weight:bold;font-family:Arial;">SP#3</td>';
-                       table_body += '<td style="top:0;border:2px solid black; width:100px;text-align:center; align:center;font-size:15px;font-weight:bold;font-family:Arial;">SP#4</td>';                      //
-                       table_body += '<td style="top:0;border:2px solid black; width:100px;text-align:center; align:center;font-size:15px;font-weight:bold;font-family:Arial;">SP</td>';
-                       table_body += '<td style="top:0;border:2px solid black; width:100px;text-align:center; align:center;font-size:15px;font-weight:bold;font-family:Arial;">SP#1</td>';
-                       table_body += '<td style="top:0;border:2px solid black; width:100px;text-align:center; align:center;font-size:15px;font-weight:bold;font-family:Arial;">SP#2</td>';
-                       table_body += '<td style="top:0;border:2px solid black; width:100px;text-align:center; align:center;font-size:15px;font-weight:bold;font-family:Arial;">SP#3</td>';
-                       table_body += '<td style="top:0;border:2px solid black; width:100px;text-align:center; align:center;font-size:15px;font-weight:bold;font-family:Arial;">SP</td>';
-                       table_body += '<td style="top:0;border:2px solid black; width:100px;text-align:center; align:center;font-size:15px;font-weight:bold;font-family:Arial;">SP</td>';
-                       table_body += '<td style="top:0;border:2px solid black; width:100px;text-align:center; align:center;font-size:15px;font-weight:bold;font-family:Arial;">SP</td>';
-                       table_body += '</tr>';
-                       
-                       for (var i = 0; i < jData.length; i++){                           
-                           table_body += '<tr style="border:2px solid black;">';
-                           table_body += '<td class="parameter" style="height:40px;color:black;text-align:left; align:center; font-size:14px;font-family:Arial; font-weight:bold;"><a href=\"javascript:ShowComparision(\'' + param[i] + '\')\">' + param[i] + '</a></td>';
+table_body += '<div class="plant-table-wrapper">';
+table_body += '<div class="plant-table-scroll">';
 
-                           if (tsj_SP1[i] != null) {
-                               //
-                               table_body += '<td style="color:black;text-align:center;font-size:14px;font-weight: bold;font-family: Arial;"><a href="javascript:ShowGraph(\'@plant1\', \'' + param[i] + '\')">' + tsj_SP1[i] + '</a></td>';
-                           }
-                           else {
-                               //
-                               table_body += '<td style="color:black;text-align:center;font-size:14px;font-weight: bold;font-family: Arial;">' + "" + '</td>';
-                           }
+table_body += '<table class="plant-responsive-table">';
 
-                           if (tsj_SP2[i] != null) {
-                               table_body += '<td style="color:black;text-align:center;font-size:14px;font-weight: bold;font-family: Arial;"><a href="javascript:ShowGraph(\'@plant2\', \'' + param[i] + '\')">' + tsj_SP2[i] + '</a></td>';
-                           }
-                           else {
-                               table_body += '<td style="color:black;text-align:center;font-size:14px;font-weight: bold;font-family: Arial;">' + "" + '</td>';
-                           }
-                           if (tsj_SP3[i] != null) {
-                               table_body += '<td style="color:black;text-align:center;font-size:14px;font-weight: bold;font-family: Arial;"><a href="javascript:ShowGraph(\'@plant3\', \'' + param[i] + '\')">' + tsj_SP3[i] + '</a></td>';
-                           }
-                           else {
-                               table_body += '<td style="color:black;text-align:center;font-size:14px;font-weight: bold;font-family: Arial;">' + "" + '</td>';
-                           }
+table_body += '<thead>';
 
-                           if (tsj_SP4[i] != null)
-                           {
-                               table_body += '<td style="color:black;text-align:center;font-size:14px;font-weight: bold;font-family: Arial;"><a href="javascript:ShowGraph(\'@plant4\', \'' + param[i] + '\')">' + tsj_SP4[i] + '</a></td>';
-                           }
-                           else {
-                               table_body += '<td style=color:black;text-align:center;font-size:14px;font-weight: bold;font-family: Arial;">' + "" + '</td>';
-                           }
+/* Plant group headings */
+table_body += '<tr>';
 
+table_body += '<th></th>';
+table_body += '<th colspan="4">TSL, Jamshedpur</th>';
+table_body += '<th>TSK</th>';
+table_body += '<th colspan="3">TSM</th>';
+table_body += '<th>NINL</th>';
+table_body += '<th>TSG</th>';
+table_body += '<th>TSMD</th>';
 
-                           if (tsk_SP[i] != null) {
-                               table_body += '<td style="color:black;text-align:center;font-size:14px;font-weight: bold;font-family: Arial;"><a href="javascript:ShowGraph(\'@plant5\', \'' + param[i] + '\')">' + tsk_SP[i] + '</a></td>';
-                           }
-                           else {
-                               table_body += '<td style="color:black;text-align:center;font-size:14px;font-weight: bold;font-family: Arial;">' + "" + '</td>';
-                           }
+table_body += '</tr>';
 
+/* Subheadings */
+table_body += '<tr>';
 
+table_body += '<th>Parameters</th>';
 
-                           if (tsbsl_SP1[i] != null) {
+table_body += '<th>SP#1</th>';
+table_body += '<th>SP#2</th>';
+table_body += '<th>SP#3</th>';
+table_body += '<th>SP#4</th>';
 
-                               table_body += '<td style="color:black;text-align:center;font-size:14px;font-weight: bold;font-family: Arial;"><a href="javascript:ShowGraph(\'@plant6\', \'' + param[i] + '\')">' + tsbsl_SP1[i] + '</a></td>';
-                           }
-                           else {
+table_body += '<th>SP</th>';
 
-                               table_body += '<td style=color:black;text-align:center;font-size:14px;font-weight: bold;font-family: Arial;">' + "" + '</td>';
-                           }
+table_body += '<th>SP#1</th>';
+table_body += '<th>SP#2</th>';
+table_body += '<th>SP#3</th>';
 
-                           if (tsbsl_SP2[i] != null) {
+table_body += '<th>SP</th>';
+table_body += '<th>SP</th>';
+table_body += '<th>SP</th>';
 
-                               table_body += '<td style="color:black;text-align:center;font-size:14px;font-weight: bold;font-family: Arial;"><a href="javascript:ShowGraph(\'@plant7\', \'' + param[i] + '\')">' + tsbsl_SP2[i] + '</a></td>';
-                           }
-                           else {
-                               table_body += '<td style=color:black;text-align:center;font-size:14px;font-weight: bold;font-family: Arial;">' + "" + '</td>';
-                           }
+table_body += '</tr>';
 
-                           if (tsbsl_SP3[i] != null) {
+table_body += '</thead>';
+table_body += '<tbody>';
 
-                               table_body += '<td style="color:black;text-align:center;font-size:14px;font-weight: bold;font-family: Arial;"><a href="javascript:ShowGraph(\'@plant8\', \'' + param[i] + '\')">' + tsbsl_SP3[i] + '</a></td>';
-                           }
+/* Your existing data loop starts here */
+for (var i = 0; i < jData.length; i++) {
 
-                           else {
-                               table_body += '<td style="color:black;text-align:center;font-size:14px;font-weight: bold;font-family: Arial;">' + "" + '</td>';
+    table_body += '<tr>';
 
-                           }
-                           if (ninl_SP[i] != null) {
-                               table_body += '<td style="color:black;text-align:center;font-size:14px;font-weight: bold;font-family: Arial;"><a href="javascript:ShowGraph(\'@plant11\', \'' + param[i] + '\')">' + ninl_SP[i] + '</a></td>';
-                           }
-                           else {
-                               table_body += '<td style="color:black;text-align:center;font-size:14px;font-weight: bold;font-family: Arial;">' + "" + '</td>';
-                           }
-                           if (tslpl_SP[i] != null) {
-                               table_body += '<td style="color:black;text-align:center;font-size:14px;font-weight: bold;font-family: Arial;"><a href="javascript:ShowGraph(\'@plant9\', \'' + param[i] + '\')">' + tslpl_SP[i] + '</a></td>';
-                           }
-                           else {
-                               table_body += '<td style="color:black;text-align:center;font-size:14px;font-weight: bold;font-family: Arial;">' + "" + '</td>';
-                           }
-                           if (tsmd_Sp[i] != null) {
-                               table_body += '<td style="color:black;text-align:center;font-size:14px;font-weight: bold;font-family: Arial;"><a href="javascript:ShowGraph(\'@plant10\', \'' + param[i] + '\')">' + tsmd_Sp[i] + '</a></td>';
-                           }
-                           else {
-                               table_body += '<td style="color:black;text-align:center;font-size:14px;font-weight: bold;font-family: Arial;">' + "" + '</td>';
-                           }
+    table_body += '<td class="parameter">';
+    table_body += '<a href="javascript:void(0)" ';
+    table_body += 'onclick="ShowComparision(';
+    table_body += "'" + param[i] + "'";
+    table_body += ')">';
+    table_body += param[i];
+    table_body += '</a>';
+    table_body += '</td>';
 
-                           table_body += ' </tr>';
-                       }
+    /* TSL SP#1 */
+    table_body += '<td>';
 
-                       table_body += '</tbody>';
+    if (tsj_SP1[i] != null) {
+        table_body += '<a href="javascript:void(0)" ';
+        table_body += 'onclick="ShowGraph(';
+        table_body += "'@plant1', '" + param[i] + "'";
+        table_body += ')">';
+        table_body += tsj_SP1[i];
+        table_body += '</a>';
+    }
 
-                       table_body += '</table>';
+    table_body += '</td>';
 
-                       $('#tableDiv').html(table_body);
-                       $('#tableExcel').html(table_body);
+    /* TSL SP#2 */
+    table_body += '<td>';
 
-                   }); //  // $_Post closed
+    if (tsj_SP2[i] != null) {
+        table_body += '<a href="javascript:void(0)" ';
+        table_body += 'onclick="ShowGraph(';
+        table_body += "'@plant2', '" + param[i] + "'";
+        table_body += ')">';
+        table_body += tsj_SP2[i];
+        table_body += '</a>';
+    }
 
-           } // Main Function Closed
+    table_body += '</td>';
+
+    /* TSL SP#3 */
+    table_body += '<td>';
+
+    if (tsj_SP3[i] != null) {
+        table_body += '<a href="javascript:void(0)" ';
+        table_body += 'onclick="ShowGraph(';
+        table_body += "'@plant3', '" + param[i] + "'";
+        table_body += ')">';
+        table_body += tsj_SP3[i];
+        table_body += '</a>';
+    }
+
+    table_body += '</td>';
+
+    /* TSL SP#4 */
+    table_body += '<td>';
+
+    if (tsj_SP4[i] != null) {
+        table_body += '<a href="javascript:void(0)" ';
+        table_body += 'onclick="ShowGraph(';
+        table_body += "'@plant4', '" + param[i] + "'";
+        table_body += ')">';
+        table_body += tsj_SP4[i];
+        table_body += '</a>';
+    }
+
+    table_body += '</td>';
+
+    /* TSK */
+    table_body += '<td>';
+
+    if (tsk_SP[i] != null) {
+        table_body += '<a href="javascript:void(0)" ';
+        table_body += 'onclick="ShowGraph(';
+        table_body += "'@plant5', '" + param[i] + "'";
+        table_body += ')">';
+        table_body += tsk_SP[i];
+        table_body += '</a>';
+    }
+
+    table_body += '</td>';
+
+    /* TSM SP#1 */
+    table_body += '<td>';
+
+    if (tsbsl_SP1[i] != null) {
+        table_body += '<a href="javascript:void(0)" ';
+        table_body += 'onclick="ShowGraph(';
+        table_body += "'@plant6', '" + param[i] + "'";
+        table_body += ')">';
+        table_body += tsbsl_SP1[i];
+        table_body += '</a>';
+    }
+
+    table_body += '</td>';
+
+    /* TSM SP#2 */
+    table_body += '<td>';
+
+    if (tsbsl_SP2[i] != null) {
+        table_body += '<a href="javascript:void(0)" ';
+        table_body += 'onclick="ShowGraph(';
+        table_body += "'@plant7', '" + param[i] + "'";
+        table_body += ')">';
+        table_body += tsbsl_SP2[i];
+        table_body += '</a>';
+    }
+
+    table_body += '</td>';
+
+    /* TSM SP#3 */
+    table_body += '<td>';
+
+    if (tsbsl_SP3[i] != null) {
+        table_body += '<a href="javascript:void(0)" ';
+        table_body += 'onclick="ShowGraph(';
+        table_body += "'@plant8', '" + param[i] + "'";
+        table_body += ')">';
+        table_body += tsbsl_SP3[i];
+        table_body += '</a>';
+    }
+
+    table_body += '</td>';
+
+    /* NINL */
+    table_body += '<td>';
+
+    if (ninl_SP[i] != null) {
+        table_body += '<a href="javascript:void(0)" ';
+        table_body += 'onclick="ShowGraph(';
+        table_body += "'@plant11', '" + param[i] + "'";
+        table_body += ')">';
+        table_body += ninl_SP[i];
+        table_body += '</a>';
+    }
+
+    table_body += '</td>';
+
+    /* TSG */
+    table_body += '<td>';
+
+    if (tslpl_SP[i] != null) {
+        table_body += '<a href="javascript:void(0)" ';
+        table_body += 'onclick="ShowGraph(';
+        table_body += "'@plant9', '" + param[i] + "'";
+        table_body += ')">';
+        table_body += tslpl_SP[i];
+        table_body += '</a>';
+    }
+
+    table_body += '</td>';
+
+    /* TSMD */
+    table_body += '<td>';
+
+    if (tsmd_Sp[i] != null) {
+        table_body += '<a href="javascript:void(0)" ';
+        table_body += 'onclick="ShowGraph(';
+        table_body += "'@plant10', '" + param[i] + "'";
+        table_body += ')">';
+        table_body += tsmd_Sp[i];
+        table_body += '</a>';
+    }
+
+    table_body += '</td>';
+
+    table_body += '</tr>';
+}
+
+table_body += '</tbody>';
+table_body += '</table>';
+
+table_body += '</div>';
+table_body += '</div>';
+
+/* Display the responsive table */
+$('#tableDiv').html(table_body);
+$('#tableExcel').html(table_body);
