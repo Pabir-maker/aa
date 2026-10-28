@@ -37,3 +37,34 @@
                 }
             }
         }
+         <div class="d-flex align-items-center ms-3 mt-2">
+                    <label for="ddlFurnaceModal" style="font-family:Allan,cursive; font-weight:bold; margin-right:10px;">
+                        Furname :-
+                    </label>
+                    <select id="ddlFurnaceModal" class="form-select w-auto">
+                        <option value="C">C</option>
+                        <option value="E">E</option>
+                        <option value="F">F</option>
+                    </select>
+                </div>
+                <div class="modal-body">
+                    <div class="table-container">
+                        <table id="tblBinDetails" class="table table-bordered" style="font-family:Courier New; font-weight:bold;">
+                            <thead>
+                                <tr>
+                                    <th style="width:30px;">FUR NAME</th>
+                                    <th style="width:30px;">iMONITOR TAG ID</th>
+                                    <th style="width:90px;">iHISTORIAN TAG NAME</th>
+                                    <th style="width:40px;">WEB COLUMN</th>
+                                    <th style="width:40px;">TAG TYPE</th>
+                                    <th style="width:40px;">REQUIRED</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button class="btn-Modalsave" onclick="btnSaveBinRequired()">Save</button>
+                    <button class="btn-Modalexit" data-bs-dismiss="modal">Exit</button>
+                </div>
